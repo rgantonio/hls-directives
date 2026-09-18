@@ -313,9 +313,7 @@ The directive should name the loop, as `"vadd/VADD_LOOP"`, unless you really wan
 
 With $D = 2$ and II of 2, the formula gives
 
-$$
-L_{\text{ii2}} = D + II \cdot (N - 1) = 2 + 2 \cdot 15 = 32 \text{ cycles},
-$$
+$$ L_{\textrm{ii2}} = D + II \cdot (N - 1) = 2 + 2 \cdot 15 = 32 \textrm{cycles} $$
 
 which is the same as $N \cdot D = 32$ for the sequential loop.
 The schedule table shows why: iteration $i + 1$ starts in the very cycle after iteration $i$ has finished, so the iterations never overlap, and the table is identical to the one for `base` in section 2.
