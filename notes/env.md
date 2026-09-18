@@ -42,6 +42,7 @@ C simulation and co-simulation both treat a non-zero return value as a failure.
 ## Report gotchas collected so far
 
 - In the loop table of a pipelined loop, the Iteration Latency column reads one cycle higher than the real value.
+- For a pipelined loop, the Iteration Latency column matched the depth from the `Pipelining result` log line in lesson 1.1, but the loop Latency column read one cycle below $D + II \cdot (N - 1)$ for II of 1, and the missing cycle appeared in the function latency instead. Compare function latencies, and take the depth from the log line.
 - The Initiation Interval column of the loop table has two sub-columns, the achieved value and the target value.
   They are not always equal.
 - The Bind Op Report, which says which operator went into which hardware resource, only appears in `<solution>/syn/report/csynth.rpt`.
