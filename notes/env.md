@@ -48,6 +48,7 @@ C simulation and co-simulation both treat a non-zero return value as a failure.
 - The Bind Op Report, which says which operator went into which hardware resource, only appears in `<solution>/syn/report/csynth.rpt`.
 - An array argument on an `ap_memory` interface can receive two ports rather than one when the schedule wants two accesses in the same cycle.
   Pinning the storage type to a single port RAM is what forces one port.
+  The directive that does it on an **argument** is `INTERFACE`, not `BIND_STORAGE`: see the `BIND_STORAGE` entries below, measured in lesson 2.3.
 - The macro `__RTL_SIMULATION__` is not defined for the testbench during co-simulation on this install, so it cannot be used to change testbench behavior between C simulation and co-simulation.
 - An `m_axi` interface with `-offset slave` creates a second AXI-Lite bundle unless the same arguments also carry `s_axilite -bundle control`.
 - A balanced sum of four values is bound to one two-input adder plus one three-input adder (`TAddSub`), and the whole tree fits in a single state at 3.33 ns.
@@ -63,10 +64,48 @@ C simulation and co-simulation both treat a non-zero return value as a failure.
   - The **area** figure is discarded downstream. Vivado sees the constant low bits of the shift amount and the unused high bits of the result and builds the multiplexer: lesson 2.2 `complete` is 8878 LUT estimated and 227 LUT implemented, against 234 estimated and 386 implemented for the partitioned equivalent. The estimate does not just exaggerate, it ranks the two designs the wrong way round.
   - The **delay** figure is spent before anyone can check it. The scheduler used 1.880 ns to give the loop body a third state, so `complete` is 13 cycles where the partitioned design is 9, and the implemented critical path is 0.621 ns with the shifter nowhere in the ten worst paths. Re-synthesising the same directive at a 5 ns clock gives 9 cycles and leaves the LUT estimate at ~8870, which isolates the cause.
   Take latency from C synthesis and area from `export_design -flow syn`; never rank directives on the C synthesis LUT column when the difference is an operator the estimator models pessimistically.
-- Flip-flop estimates, unlike LUT estimates, track implementation closely on these designs — within one or two in every solution of lessons 2.1 and 2.2 — because registers follow from the schedule.
+- Flip-flop estimates, unlike LUT estimates, track implementation closely on these designs — within one or two in every solution of lessons 2.1 and 2.2, and two low in every solution of lesson 2.3 — because registers follow from the schedule.
+  The exception is a register that logic synthesis can absorb into a hard block.
+  Lesson 2.3 `bram` estimates 58 flip-flops and implements 24: Vivado pulls the 32-bit register that Vitis placed behind the block RAM into the block's own output register.
+  So the rule is that flip-flop estimates are reliable **except across a hard-block boundary**, and a register sitting directly on a block RAM output is exactly that case.
 - An `array_partition` whose bank index is a run-time value but whose address inside the bank is a compile-time constant lets Vitis read every bank at every address before the loop and keep the whole array in registers, which removes the reads from the loop body altogether.
   Lesson 2.1 `block4` does this: sixteen loads hoisted, 512 flip-flops, and a lower function latency than the `cyclic` solution that the access pattern was supposed to favour.
   The latency table alone does not show it; the register table of the utilization report does.
+- The section of `csynth.rpt` that lists every memory with its storage type, implementation and latency is headed `== Storage Report`, not "Bind Storage Report".
+  Its columns are `Usage` (the storage type, as `ram_1p array`), `BRAM`, `Pragma`, `Variable`, `Impl` and `Latency`.
+  `Pragma` reads `yes` only where a directive asked for the binding, which is the only way to tell a requested storage type from one the tool chose on its own.
+- The `Latency` column of that Storage Report can print the implementation's default latency rather than the one in force.
+  Lesson 2.3 `bram_lat2` sets `-latency 2` on a block RAM and the column still reads 1, although the directive did take effect.
+  The two places that state it correctly are the generated module name, `vadd_a_buf_RAM_1P_BRAM_2R1W` against `..._1R1W`, and the `<Latency = 2>` field of the core in `.autopilot/db/<top>.verbose.sched.rpt`.
+- `BIND_STORAGE` prints no `Applying ...` line when it is accepted, unlike `ARRAY_PARTITION` and `ARRAY_RESHAPE`.
+  The Storage Report is then the only confirmation that it took effect.
+  It does log when it is rejected; see the next entry.
+- `BIND_STORAGE` on a **top-level array argument** is rejected outright, not partially applied:
+  `WARNING: [HLS 214-340] The resource pragma (bind_storage) on top-level function argument, in 'call' is unsupported, please use INTERFACE pragma instead`.
+  The synthesised design is then identical to one with no directive at all.
+  `set_directive_interface -mode ap_memory -storage_type ram_1p -latency 2 "<top>" <arg>` is the working form, and its `-latency` does reach the scheduler: in lesson 2.3 it moved `COPY_LOOP` from an iteration latency of 2 to 3.
+- Memory read delays the scheduler charges for a local 16-word, 32-bit array, measured in lesson 2.3:
+
+  | Implementation                     | Charged per state | Core                                  |
+  | ---------------------------------- | ----------------- | ------------------------------------- |
+  | `auto`, chosen by the tool         | 0.677 ns          | `Core 83 'RAM'`, latency 1            |
+  | `LUTRAM`, latency 1                | 0.677 ns          | `Core 89 'RAM_1P_LUTRAM'`, latency 1  |
+  | `BRAM`, latency 1                  | 1.237 ns          | `Core 90 'RAM_1P_BRAM'`, latency 1    |
+  | `BRAM`, latency 2                  | 0.57 ns           | `Core 90 'RAM_1P_BRAM'`, latency 2    |
+
+  The 1.237 ns confirms the value inferred from lesson 1.5.
+  The delay is charged in every state the read spans, not only in the one that receives the data: two states at a latency of 1, three at a latency of 2.
+  In a schedule line the bracketed figure, as in `Operation 42 [3/3] (0.57ns)`, is what the operation costs in its state; the `<Delay = 1.23>` at the end is the nominal core delay, and for a latency of 2 the two differ because the core delay is split across the extra stage.
+- `-impl` is a scheduling directive as much as a resource one, because of those delays.
+  Lesson 2.3 moves a 16-word array from LUTRAM to block RAM and nothing else, and `ADD_LOOP` grows from two states to three: 82 cycles against 66, purely from 1.237 ns against 0.677 ns.
+  Read the loop table after every `BIND_STORAGE` change, not only the resource columns.
+- `-latency 2` on a block RAM does not always cost a cycle per read.
+  It costs one only when the loop body has no state to absorb the extra stage, and a body that a slow read has already stretched usually has one.
+  Lesson 2.3 `bram_lat2` is 82 cycles, exactly equal to `bram`.
+- For a 16-word, 32-bit local array, `ram_style = "auto"` resolves to distributed RAM.
+  Lesson 2.3 `base` and `lutram` are identical at every level: same schedule, same estimate, same generated module except for the attribute string, and the same 85 LUT, 55 FF, 0 BRAM after logic synthesis, built from `RAM32X1S` primitives.
+- The C synthesis Memory table badly under-counts a LUTRAM.
+  Lesson 2.3 estimates 8 LUT for a 16-by-32 distributed RAM that Vivado builds in 69, while the 32 flip-flops of its output register are exact.
 
 ## Directory layout
 
