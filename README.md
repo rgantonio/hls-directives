@@ -56,9 +56,9 @@ Synthesis output directories are named `*_proj` and are not committed.
 | 1.3 | LOOP_FLATTEN | `s1_loops/13_loop_flatten` | planned |
 | 1.4 | LOOP_MERGE | `s1_loops/14_loop_merge` | planned |
 | 1.5 | DEPENDENCE | `s1_loops/15_dependence` | planned |
-| 2.1 | ARRAY_PARTITION | `s2_memory/21_array_partition` | planned |
-| 2.2 | ARRAY_RESHAPE | `s2_memory/22_array_reshape` | planned |
-| 2.3 | BIND_STORAGE | `s2_memory/23_bind_storage` | planned |
+| 2.1 | ARRAY_PARTITION | `s2_arrays/21_array_partition` | done |
+| 2.2 | ARRAY_RESHAPE | `s2_arrays/22_array_reshape` | done |
+| 2.3 | BIND_STORAGE | `s2_arrays/23_bind_storage` | planned |
 | 3.1 | UNROLL | `s3_parallelism/31_unroll` | planned |
 | 3.2 | LATENCY | `s3_parallelism/32_latency` | planned |
 | 3.5 | EXPRESSION_BALANCE | `s3_parallelism/35_expression_balance` | planned |

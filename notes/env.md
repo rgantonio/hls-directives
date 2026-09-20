@@ -52,6 +52,18 @@ C simulation and co-simulation both treat a non-zero return value as a failure.
 - An `m_axi` interface with `-offset slave` creates a second AXI-Lite bundle unless the same arguments also carry `s_axilite -bundle control`.
 - A balanced sum of four values is bound to one two-input adder plus one three-input adder (`TAddSub`), and the whole tree fits in a single state at 3.33 ns.
   The extra state that follows it is the RAM write of the result, not a second level of addition.
+- `ARRAY_RESHAPE` logs the same message ID as `ARRAY_PARTITION`, `HLS 214-248`, with the verb changed: `Applying array_reshape to 'x': Cyclic reshaping with factor 4 on dimension 1.`
+- A completely reshaped top-level array argument becomes one wide `ap_none` input port, C type `pointer`, not a memory of depth 1.
+  Lesson 2.2 `complete` gives a single 512-bit port for 16 elements of 32 bits.
+- Selecting a slice of a reshaped array with a run-time index is not emitted as a multiplexer.
+  Vitis writes `word >> (32 * index)`, a variable shifter as wide as the whole word, and both prices and schedules it as a general shifter even though the shift amount is always a multiple of the element width and only the low element is used.
+  Measured in lesson 2.2: 1.510 ns and 423 LUT for a 128-bit word, 1.880 ns and 2171 LUT for a 512-bit word, against 0.525 ns and 20 LUT for the `sparsemux` that `ARRAY_PARTITION` generates for the same selection in lesson 2.1.
+  No `sparsemux` module is generated for a reshaped array.
+- Both of those shifter figures are wrong, and they fail differently, which is the lesson of 2.2:
+  - The **area** figure is discarded downstream. Vivado sees the constant low bits of the shift amount and the unused high bits of the result and builds the multiplexer: lesson 2.2 `complete` is 8878 LUT estimated and 227 LUT implemented, against 234 estimated and 386 implemented for the partitioned equivalent. The estimate does not just exaggerate, it ranks the two designs the wrong way round.
+  - The **delay** figure is spent before anyone can check it. The scheduler used 1.880 ns to give the loop body a third state, so `complete` is 13 cycles where the partitioned design is 9, and the implemented critical path is 0.621 ns with the shifter nowhere in the ten worst paths. Re-synthesising the same directive at a 5 ns clock gives 9 cycles and leaves the LUT estimate at ~8870, which isolates the cause.
+  Take latency from C synthesis and area from `export_design -flow syn`; never rank directives on the C synthesis LUT column when the difference is an operator the estimator models pessimistically.
+- Flip-flop estimates, unlike LUT estimates, track implementation closely on these designs — within one or two in every solution of lessons 2.1 and 2.2 — because registers follow from the schedule.
 - An `array_partition` whose bank index is a run-time value but whose address inside the bank is a compile-time constant lets Vitis read every bank at every address before the loop and keep the whole array in registers, which removes the reads from the loop body altogether.
   Lesson 2.1 `block4` does this: sixteen loads hoisted, 512 flip-flops, and a lower function latency than the `cyclic` solution that the access pattern was supposed to favour.
   The latency table alone does not show it; the register table of the utilization report does.
