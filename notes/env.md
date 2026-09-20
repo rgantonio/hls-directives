@@ -50,6 +50,11 @@ C simulation and co-simulation both treat a non-zero return value as a failure.
   Pinning the storage type to a single port RAM is what forces one port.
 - The macro `__RTL_SIMULATION__` is not defined for the testbench during co-simulation on this install, so it cannot be used to change testbench behavior between C simulation and co-simulation.
 - An `m_axi` interface with `-offset slave` creates a second AXI-Lite bundle unless the same arguments also carry `s_axilite -bundle control`.
+- A balanced sum of four values is bound to one two-input adder plus one three-input adder (`TAddSub`), and the whole tree fits in a single state at 3.33 ns.
+  The extra state that follows it is the RAM write of the result, not a second level of addition.
+- An `array_partition` whose bank index is a run-time value but whose address inside the bank is a compile-time constant lets Vitis read every bank at every address before the loop and keep the whole array in registers, which removes the reads from the loop body altogether.
+  Lesson 2.1 `block4` does this: sixteen loads hoisted, 512 flip-flops, and a lower function latency than the `cyclic` solution that the access pattern was supposed to favour.
+  The latency table alone does not show it; the register table of the utilization report does.
 
 ## Directory layout
 
