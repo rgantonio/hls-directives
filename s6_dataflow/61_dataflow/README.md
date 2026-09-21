@@ -187,23 +187,17 @@ A port read costs two states, because the address goes out in one cycle and the 
 
 In `base`, both loop bodies fit in two states, because the write to the local RAM can be merged with the cycle that captures the read data:
 
-$$
-L_{\textrm{LOAD\_LOOP}} = L_{\textrm{STORE\_LOOP}} = N \times 2 = 16 \times 2 = 32 \textrm{ cycles.}
-$$
+$$L_{\textrm{LOAD\_LOOP}} = L_{\textrm{STORE\_LOOP}} = N \times 2 = 16 \times 2 = 32 \textrm{ cycles.}$$
 
 The function adds one state to enter each loop region, so
 
-$$
-L_{\textrm{base}} = 32 + 32 + 2 = 66, \qquad \textrm{II}_{\textrm{base}} = 67,
-$$
+$$L_{\textrm{base}} = 32 + 32 + 2 = 66, \qquad \textrm{II}_{\textrm{base}} = 67,$$
 
 because with the `ap_ctrl_hs` protocol and a single FSM, a new call can start only one cycle after `ap_done`.
 
 In `dataflow`, the LOAD body needs a third state for the blocking FIFO write (section 2), while the STORE body keeps two:
 
-$$
-L_{\textrm{LOAD proc}} = 16 \times 3 + 1 = 49, \qquad L_{\textrm{STORE proc}} = 16 \times 2 + 1 = 33.
-$$
+$$L_{\textrm{LOAD proc}} = 16 \times 3 + 1 = 49, \qquad L_{\textrm{STORE proc}} = 16 \times 2 + 1 = 33.$$
 
 ### The whole call
 
