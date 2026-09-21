@@ -1,0 +1,15 @@
+#-----------------------------------------------------------
+# xsim v2023.2.2 (64-bit)
+# SW Build 4126759 on Thu Feb  8 23:52:05 MST 2024
+# IP Build 4126054 on Fri Feb  9 11:39:09 MST 2024
+# SharedData Build 4115275 on Tue Jan 30 00:40:57 MST 2024
+# Start of session at: Mon Sep 21 13:48:12 2026
+# Process ID: 1936604
+# Current directory: /users/micas/rantonio/no_backup/kul_main/hls-directives/s5_interfaces/53_reset/rst_sim/base
+# Command line: xsim -nolog -mode tcl -source {xsim.dir/rst_tb/xsim_script.tcl}
+# Log file: 
+# Journal file: /users/micas/rantonio/no_backup/kul_main/hls-directives/s5_interfaces/53_reset/rst_sim/base/xsim.jou
+# Running On: barnard3.esat.kuleuven.be, OS: Linux, CPU Frequency: 2992.966 MHz, CPU Physical cores: 24, Host memory: 270453 MB
+#-----------------------------------------------------------
+source xsim.dir/rst_tb/xsim_script.tcl
+run -all

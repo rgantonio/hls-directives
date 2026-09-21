@@ -1,0 +1,585 @@
+$date
+   Mon Sep 21 13:48:25 2026
+$end
+
+$version
+  2023.2.2
+  $dumpfile ("rst_tb.vcd") 
+$end
+
+$timescale
+  1ps
+$end
+
+$scope module rst_tb $end
+$var reg 1 ! ap_clk $end
+$var reg 1 " ap_rst $end
+$var reg 1 # ap_start $end
+$var reg 3 $ slot [2:0] $end
+$var wire 1 % ap_done $end
+$var wire 1 & ap_idle $end
+$var wire 1 ' ap_ready $end
+$var wire 1 ( hits_ap_vld $end
+$var wire 8 ) hits [7:0] $end
+$var wire 8 * ap_return [7:0] $end
+$var integer 32 + cyc [31:0] $end
+$scope module dut $end
+$var wire 1 , ap_clk $end
+$var wire 1 - ap_rst $end
+$var wire 1 . ap_start $end
+$var wire 3 / slot [2:0] $end
+$var wire 8 ) hits [7:0] $end
+$var wire 8 * ap_return [7:0] $end
+$var reg 1 0 ap_done $end
+$var reg 1 1 ap_idle $end
+$var reg 1 2 ap_ready $end
+$var reg 1 3 hits_ap_vld $end
+$var reg 2 4 ap_CS_fsm [1:0] $end
+$var wire 1 5 ap_CS_fsm_state1 $end
+$var reg 8 6 cnt [7:0] $end
+$var reg 3 7 hist_address0 [2:0] $end
+$var reg 1 8 hist_ce0 $end
+$var reg 1 9 hist_we0 $end
+$var wire 8 : hist_q0 [7:0] $end
+$var reg 3 ; hist_addr_reg_93 [2:0] $end
+$var wire 64 < zext_ln12_fu_64_p1 [63:0] $end
+$var wire 8 = add_ln11_fu_73_p2 [7:0] $end
+$var wire 1 > ap_CS_fsm_state2 $end
+$var wire 8 ? h_fu_85_p2 [7:0] $end
+$var reg 2 @ ap_NS_fsm [1:0] $end
+$var reg 1 A ap_ST_fsm_state1_blk $end
+$var wire 1 B ap_ST_fsm_state2_blk $end
+$var wire 1 C ap_ce_reg $end
+$scope module hist_U $end
+$var wire 3 D address0 [2:0] $end
+$var wire 1 E ce0 $end
+$var wire 8 ? d0 [7:0] $end
+$var wire 1 F we0 $end
+$var reg 8 G q0 [7:0] $end
+$var wire 1 - reset $end
+$var wire 1 , clk $end
+$upscope $end
+$upscope $end
+$scope task call $end
+$var integer 32 H n [31:0] $end
+$var integer 32 I lat [31:0] $end
+$var integer 32 J r [31:0] $end
+$var integer 32 K h [31:0] $end
+$var integer 32 L done [31:0] $end
+$upscope $end
+$scope task pulse_reset $end
+$var integer 32 M n [31:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+
+#0
+$dumpvars
+0!
+1"
+0#
+b0 $
+0%
+1&
+0'
+0(
+bx )
+b1100101 *
+b0 +
+0,
+1-
+0.
+b0 /
+00
+11
+02
+03
+b1 4
+15
+b1100100 6
+b0 7
+08
+09
+bx :
+bx ;
+b0 <
+b1100101 =
+0>
+bx ?
+b1 @
+1A
+0B
+zC
+b0 D
+0E
+0F
+bx G
+bx H
+bx I
+bx J
+bx K
+bx L
+bx M
+$end
+
+#1665
+1!
+b1 +
+1,
+b0 ;
+
+#3330
+0!
+0,
+
+#4995
+1!
+b10 +
+1,
+
+#6660
+0!
+0"
+0,
+0-
+b1 H
+
+#8325
+1!
+b11 +
+1,
+
+#9990
+0!
+1#
+0&
+0,
+1.
+01
+18
+b10 @
+0A
+1E
+b0 I
+b11111111111111111111111111111111 K
+b0 L
+
+#11655
+1!
+1%
+1'
+1(
+b10 )
+b100 +
+1,
+10
+12
+13
+b10 4
+05
+19
+b1 :
+1>
+b10 ?
+b1 @
+1F
+b1 G
+
+#13320
+0!
+0#
+0,
+0.
+1A
+b10 H
+b1 I
+b1100101 J
+b10 K
+b1 L
+
+#14985
+1!
+0%
+1&
+0'
+0(
+b1100110 *
+b101 +
+1,
+00
+11
+02
+03
+b1 4
+15
+b1100101 6
+08
+09
+b1100110 =
+0>
+0E
+0F
+
+#16650
+0!
+1#
+0&
+0,
+1.
+01
+18
+b10 @
+0A
+1E
+b0 I
+b11111111111111111111111111111111 K
+b0 L
+
+#18315
+1!
+1%
+1'
+1(
+b11 )
+b110 +
+1,
+10
+12
+13
+b10 4
+05
+19
+b10 :
+1>
+b11 ?
+b1 @
+1F
+b10 G
+
+#19980
+0!
+0#
+0,
+0.
+1A
+b11 H
+b1 I
+b1100110 J
+b11 K
+b1 L
+
+#21645
+1!
+0%
+1&
+0'
+0(
+b1100111 *
+b111 +
+1,
+00
+11
+02
+03
+b1 4
+15
+b1100110 6
+08
+09
+b1100111 =
+0>
+0E
+0F
+
+#23310
+0!
+1#
+0&
+0,
+1.
+01
+18
+b10 @
+0A
+1E
+b0 I
+b11111111111111111111111111111111 K
+b0 L
+
+#24975
+1!
+1%
+1'
+1(
+b100 )
+b1000 +
+1,
+10
+12
+13
+b10 4
+05
+19
+b11 :
+1>
+b100 ?
+b1 @
+1F
+b11 G
+
+#26640
+0!
+0#
+0,
+0.
+1A
+b1 I
+b1100111 J
+b100 K
+b1 L
+b10 M
+
+#28305
+1!
+0%
+1&
+0'
+0(
+b1101000 *
+b1001 +
+1,
+00
+11
+02
+03
+b1 4
+15
+b1100111 6
+08
+09
+b1101000 =
+0>
+0E
+0F
+
+#29970
+0!
+1"
+0,
+1-
+
+#31635
+1!
+b1100101 *
+b1010 +
+1,
+b1100100 6
+b1100101 =
+
+#33300
+0!
+0,
+
+#34965
+1!
+b1011 +
+1,
+
+#36630
+0!
+0"
+0,
+0-
+b100 H
+
+#38295
+1!
+b1100 +
+1,
+
+#39960
+0!
+1#
+0&
+0,
+1.
+01
+18
+b10 @
+0A
+1E
+b0 I
+b11111111111111111111111111111111 K
+b0 L
+
+#41625
+1!
+1%
+1'
+1(
+b101 )
+b1101 +
+1,
+10
+12
+13
+b10 4
+05
+19
+b100 :
+1>
+b101 ?
+b1 @
+1F
+b100 G
+
+#43290
+0!
+0#
+0,
+0.
+1A
+b101 H
+b1 I
+b1100101 J
+b101 K
+b1 L
+
+#44955
+1!
+0%
+1&
+0'
+0(
+b1100110 *
+b1110 +
+1,
+00
+11
+02
+03
+b1 4
+15
+b1100101 6
+08
+09
+b1100110 =
+0>
+0E
+0F
+
+#46620
+0!
+1#
+0&
+0,
+1.
+01
+18
+b10 @
+0A
+1E
+b0 I
+b11111111111111111111111111111111 K
+b0 L
+
+#48285
+1!
+1%
+1'
+1(
+b110 )
+b1111 +
+1,
+10
+12
+13
+b10 4
+05
+19
+b101 :
+1>
+b110 ?
+b1 @
+1F
+b101 G
+
+#49950
+0!
+0#
+0,
+0.
+1A
+b110 H
+b1 I
+b1100110 J
+b110 K
+b1 L
+
+#51615
+1!
+0%
+1&
+0'
+0(
+b1100111 *
+b10000 +
+1,
+00
+11
+02
+03
+b1 4
+15
+b1100110 6
+08
+09
+b1100111 =
+0>
+0E
+0F
+
+#53280
+0!
+1#
+0&
+0,
+1.
+01
+18
+b10 @
+0A
+1E
+b0 I
+b11111111111111111111111111111111 K
+b0 L
+
+#54945
+1!
+1%
+1'
+1(
+b111 )
+b10001 +
+1,
+10
+12
+13
+b10 4
+05
+19
+b110 :
+1>
+b111 ?
+b1 @
+1F
+b110 G
+
+#56610
+0!
+0#
+0,
+b1 I
+b1100111 J
+b111 K
+b1 L

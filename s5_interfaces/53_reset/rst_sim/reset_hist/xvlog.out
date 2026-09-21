@@ -1,0 +1,10 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "/users/micas/rantonio/no_backup/kul_main/hls-directives/s5_interfaces/53_reset/rst_sim/reset_hist/counter_hist_RAM_AUTO_1R1W_ram.v" into library work
+INFO: [VRFC 10-311] analyzing module counter_hist_RAM_AUTO_1R1W_ram
+INFO: [VRFC 10-2263] Analyzing Verilog file "/users/micas/rantonio/no_backup/kul_main/hls-directives/s5_interfaces/53_reset/rst_sim/reset_hist/counter_hist_RAM_AUTO_1R1W_rom.v" into library work
+INFO: [VRFC 10-311] analyzing module counter_hist_RAM_AUTO_1R1W_rom
+INFO: [VRFC 10-2263] Analyzing Verilog file "/users/micas/rantonio/no_backup/kul_main/hls-directives/s5_interfaces/53_reset/rst_sim/reset_hist/counter_hist_RAM_AUTO_1R1W.v" into library work
+INFO: [VRFC 10-311] analyzing module counter_hist_RAM_AUTO_1R1W
+INFO: [VRFC 10-2263] Analyzing Verilog file "/users/micas/rantonio/no_backup/kul_main/hls-directives/s5_interfaces/53_reset/rst_sim/reset_hist/counter.v" into library work
+INFO: [VRFC 10-311] analyzing module counter
+INFO: [VRFC 10-2263] Analyzing Verilog file "/users/micas/rantonio/no_backup/kul_main/hls-directives/s5_interfaces/53_reset/tb/rst_tb.v" into library work
+INFO: [VRFC 10-311] analyzing module rst_tb
